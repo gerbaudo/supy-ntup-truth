@@ -254,19 +254,19 @@ def extractWchildrenIndices(wIndex, pdgs, childrenIndices) :
 def extractTauchildrenIndices(tauIndex, pdgs, childrenIndices) :
     return extractXchildrenIndices(xPdgs=[+15, -15], xIndex=tauIndex, pdgs=pdgs, childrenIndices=childrenIndices)
 #___________________________________________________________
-class wChildrenIndices(wrappedChain.calculable) :
-    @property
-    def name(self) : return 'wChildrenIndices'.join(self.fixes)
-    def __init__(self, collection=defaultColl) :
-        self.fixes = collection
-        self.stash(['pdgId', 'child_index','wIndices'])
-    def update(self,_) :
-        ws        = frozenset([+24, -24])
-        wI        = self.source[self.wIndices]
-        assert len(wI)==1,"don't know how to deal with multiple W"
-        wI        = wI[0]
-        self.value = extractWchildrenIndices(wI, self.source[self.pdgId],
-                                             self.source[self.child_index])
+# class wChildrenIndices(wrappedChain.calculable) :
+#     @property
+#     def name(self) : return 'wChildrenIndices'.join(self.fixes)
+#     def __init__(self, collection=defaultColl) :
+#         self.fixes = collection
+#         self.stash(['pdgId', 'child_index','wIndices'])
+#     def update(self,_) :
+#         ws        = frozenset([+24, -24])
+#         wI        = self.source[self.wIndices]
+#         assert len(wI)==1,"don't know how to deal with multiple W"
+#         wI        = wI[0]
+#         self.value = extractWchildrenIndices(wI, self.source[self.pdgId],
+#                                              self.source[self.child_index])
 #___________________________________________________________
 def extractWdecayType(pdgChildren=[]):
     pdgs = frozenset(pdgChildren)
@@ -297,35 +297,35 @@ def extractTaudecayType(pdgChildren=[]):
         return leptonic
     else : return hadronic # we could try to distinguish b/w had and unknown...not now
 #___________________________________________________________
-class wDecayType(wrappedChain.calculable) :
-    @property
-    def name(self) : return 'wDecayType'.join(self.fixes)
-    def __init__(self, collection=defaultColl) :
-        self.fixes = collection
-        self.stash(['pdgId', 'wChildrenIndices'])
-    def update(self, _) :
-        children = self.source[self.wChildrenIndices]
-        pdgs     = self.source[self.pdgId]
-        pdgs     = [pdgs[i] for i in children]
-        self.value = extractWdecayType(pdgs)
-#___________________________________________________________
-class wIsLeptonic(wrappedChain.calculable) :
-    @property
-    def name(self) : return 'wIsLeptonic'.join(self.fixes)
-    def __init__(self, collection=defaultColl) :
-        self.fixes = collection
-        self.stash(['wDecayType'])
-    def update(self, _) :
-        self.value = self.source[self.wDecayType]==0
-#___________________________________________________________
-class wIsHadronic(wrappedChain.calculable) :
-    @property
-    def name(self) : return 'wIsHadronic'.join(self.fixes)
-    def __init__(self, collection=defaultColl) :
-        self.fixes = collection
-        self.stash(['wDecayType'])
-    def update(self, _) :
-        self.value = self.source[self.wDecayType]==1
+# class wDecayType(wrappedChain.calculable) :
+#     @property
+#     def name(self) : return 'wDecayType'.join(self.fixes)
+#     def __init__(self, collection=defaultColl) :
+#         self.fixes = collection
+#         self.stash(['pdgId', 'wChildrenIndices'])
+#     def update(self, _) :
+#         children = self.source[self.wChildrenIndices]
+#         pdgs     = self.source[self.pdgId]
+#         pdgs     = [pdgs[i] for i in children]
+#         self.value = extractWdecayType(pdgs)
+# #___________________________________________________________
+# class wIsLeptonic(wrappedChain.calculable) :
+#     @property
+#     def name(self) : return 'wIsLeptonic'.join(self.fixes)
+#     def __init__(self, collection=defaultColl) :
+#         self.fixes = collection
+#         self.stash(['wDecayType'])
+#     def update(self, _) :
+#         self.value = self.source[self.wDecayType]==0
+# #___________________________________________________________
+# class wIsHadronic(wrappedChain.calculable) :
+#     @property
+#     def name(self) : return 'wIsHadronic'.join(self.fixes)
+#     def __init__(self, collection=defaultColl) :
+#         self.fixes = collection
+#         self.stash(['wDecayType'])
+#     def update(self, _) :
+#         self.value = self.source[self.wDecayType]==1
 #___________________________________________________________
 class HtautauTauIndices(wrappedChain.calculable) :
     "Indices of the taus from H->tautau"
